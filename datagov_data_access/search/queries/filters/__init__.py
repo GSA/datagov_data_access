@@ -1,3 +1,4 @@
+from datagov_data_access.search.queries.filters.access_level import ACCESS_LEVEL_FILTER
 from datagov_data_access.search.queries.filters.base import (
     API_CONTEXT,
     MAIN_CONTEXT,
@@ -32,4 +33,5 @@ FILTERS = (
     PUBLISHER_FILTER,
     SPATIAL_DATA_FILTER,
     COLLECTION_FILTER,
+    ACCESS_LEVEL_FILTER,
 )

@@ -35,6 +35,7 @@ MAPPINGS = {
                 },
             },
         },
+        "access_level": {"type": "keyword"},
         "keyword": {
             "type": "text",
             "analyzer": TEXT_ANALYZER,
