@@ -6,6 +6,7 @@ import pytest
 from datagov_data_access.db.interfaces.catalog import CatalogDBInterface
 from datagov_data_access.db.models import Dataset, Organization
 from datagov_data_access.search.queries.criteria import SearchCriteria
+from datagov_data_access.search.queries.filters.base import API_CONTEXT
 from tests.conftest import add_dataset_with_harvest_record
 
 
@@ -286,6 +287,12 @@ def test_search_spatial_geometry(interface_with_dataset, opensearch_writer):
         )
     )
     assert len(results) > 0
+
+
+def test_from_request_args_parses_access_level():
+    args = {"access_level": "restricted public"}
+    criteria = SearchCriteria.from_request_args(args, route_context=API_CONTEXT)
+    assert criteria.get_filter("access_level") == "restricted public"
 
 
 class TestPhraseSearch:
