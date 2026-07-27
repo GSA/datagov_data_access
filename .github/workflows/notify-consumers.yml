@@ -1,0 +1,43 @@
+name: Notify data-access consumers
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    if: ${{ !github.event.release.prerelease }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        repository:
+          - datagov-harvester
+          - datagov-catalog
+
+    steps:
+      - name: Dispatch dependency update
+        env:
+          GH_TOKEN: ${{ secrets.DATA_ACCESS_RELEASE_TOKEN }}
+          TARGET_REPOSITORY: ${{ matrix.repository }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+        run: |
+          jq -n \
+            --arg version "$RELEASE_TAG" \
+            --arg release_url "$RELEASE_URL" \
+            '{
+              event_type: "data-access-released",
+              client_payload: {
+                version: $version,
+                release_url: $release_url
+              }
+            }' |
+          gh api \
+            --method POST \
+            "repos/GSA/${TARGET_REPOSITORY}/dispatches" \
+            --input -
