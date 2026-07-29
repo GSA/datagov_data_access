@@ -294,6 +294,7 @@ def generate_harvester_dynamic_fixtures() -> Dict[str, Any]:
             "records_errored",
             "records_ignored",
             "records_validated",
+            "records_warned",
         ]:
             if field in template:
                 job[field] = template[field]
