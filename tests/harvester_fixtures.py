@@ -171,6 +171,12 @@ def generate_harvester_dynamic_fixtures() -> Dict[str, Any]:
             "records_ignored": 0,
             "records_validated": 0,
             "records_warned": 3,
+            "dcatus_catalog": {
+                "@type": "Catalog",
+                "title": "Test Catalog",
+                "description": "A sample catalog for testing purposes.",
+                "publisher": {"name": "Test Org"},
+            },
         },
         {
             "status": "new",
@@ -301,6 +307,7 @@ def generate_harvester_dynamic_fixtures() -> Dict[str, Any]:
             "records_ignored",
             "records_validated",
             "records_warned",
+            "dcatus_catalog",
         ]:
             if field in template:
                 job[field] = template[field]

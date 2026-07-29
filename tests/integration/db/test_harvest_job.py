@@ -86,6 +86,28 @@ def test_update_harvest_job_records_warned(interface_no_jobs, job_data_dcatus):
     assert updated.records_warned == 42
 
 
+def test_add_harvest_job_dcatus_catalog(
+    interface, organization_data, source_data_dcatus, job_data_dcatus
+):
+    interface.add_organization(organization_data)
+    interface.add_harvest_source(source_data_dcatus)
+
+    # guards against the fixture silently dropping the field again
+    assert job_data_dcatus["dcatus_catalog"]
+
+    job = interface.add_harvest_job(job_data_dcatus)
+    assert job.dcatus_catalog == job_data_dcatus["dcatus_catalog"]
+
+
+def test_update_harvest_job_dcatus_catalog(interface_no_jobs, job_data_dcatus):
+    interface_no_jobs.add_harvest_job(job_data_dcatus)
+    catalog = {"@type": "Catalog", "title": "Updated Catalog"}
+    updated = interface_no_jobs.update_harvest_job(
+        job_data_dcatus["id"], {"dcatus_catalog": catalog}
+    )
+    assert updated.dcatus_catalog == catalog
+
+
 def test_get_all_harvest_jobs_by_facet(
     source_data_dcatus, interface_with_multiple_jobs
 ):
