@@ -17,11 +17,7 @@ ACCESS_LEVEL_FILTER = FilterDefinition(
     name="access_level",
     query_params=("access_level",),
     parse_contexts=(MAIN_CONTEXT, API_CONTEXT),
-    api_query_params=(
-        ApiQueryParam(
-            "access_level", enum_values=("public", "restricted public", "non-public")
-        ),
-    ),
+    api_query_params=(ApiQueryParam("access_level"),),
     parse=lambda args: parse_string(args, "access_level"),
     to_query_pairs=lambda value: [("access_level", value)],
     clause_builder=_clause,

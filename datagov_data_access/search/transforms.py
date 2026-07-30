@@ -125,14 +125,7 @@ def distribution_titles(value: Any) -> list[str]:
 
 def coerce_access_level(value: Any) -> str:
     text = _clean_string(value)
-    if text is None:
-        return ""
-    normalized = text.lower()
-    return (
-        normalized
-        if normalized in {"public", "restricted public", "non-public"}
-        else ""
-    )
+    return text.lower() if text is not None else ""
 
 
 # dest_field -> (source_dcat_key, coercer)
@@ -144,7 +137,7 @@ INDEX_FIELDS: dict[str, tuple[str, Callable[[Any], Any]]] = {
     "theme": ("theme", coerce_theme_labels),
     "identifier": ("identifier", coerce_identifier),
     "distribution_titles": ("distribution", distribution_titles),
-    "accessLevel": (("accessLevel", "accessRights"), coerce_access_level),
+    "accessLevel": ("accessLevel", coerce_access_level),
 }
 
 
