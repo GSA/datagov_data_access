@@ -7,6 +7,9 @@ from datagov_data_access.search.queries.filters.base import (
 )
 from datagov_data_access.search.queries.filters.collection import COLLECTION_FILTER
 from datagov_data_access.search.queries.filters.geography import GEOGRAPHY_FILTER
+from datagov_data_access.search.queries.filters.has_download import (
+    HAS_DOWNLOAD_FILTER,
+)
 from datagov_data_access.search.queries.filters.keyword import KEYWORD_FILTER
 from datagov_data_access.search.queries.filters.organization import ORGANIZATION_FILTER
 from datagov_data_access.search.queries.filters.organization_type import (
@@ -32,4 +35,5 @@ FILTERS = (
     PUBLISHER_FILTER,
     SPATIAL_DATA_FILTER,
     COLLECTION_FILTER,
+    HAS_DOWNLOAD_FILTER,
 )
