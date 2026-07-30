@@ -15,6 +15,8 @@ schema versions can share one mapping:
 * ``keyword``         -> list of strings
 * ``title``/``description`` -> string
 * ``distribution_titles``   -> list of distribution titles
+* ``accessLevel``   -> normalized lowercase access level string
+                        (``public``, ``restricted public``, or ``non-public``)
 
 To add a new indexed field, register it in :data:`INDEX_FIELDS`. The module
 performs no I/O and knows nothing about OpenSearch itself.
@@ -121,6 +123,18 @@ def distribution_titles(value: Any) -> list[str]:
     return titles
 
 
+def coerce_access_level(value: Any) -> str:
+    text = _clean_string(value)
+    if text is None:
+        return ""
+    normalized = text.lower()
+    return (
+        normalized
+        if normalized in {"public", "restricted public", "non-public"}
+        else ""
+    )
+
+
 # dest_field -> (source_dcat_key, coercer)
 INDEX_FIELDS: dict[str, tuple[str, Callable[[Any], Any]]] = {
     "title": ("title", coerce_text),
@@ -130,6 +144,7 @@ INDEX_FIELDS: dict[str, tuple[str, Callable[[Any], Any]]] = {
     "theme": ("theme", coerce_theme_labels),
     "identifier": ("identifier", coerce_identifier),
     "distribution_titles": ("distribution", distribution_titles),
+    "accessLevel": (("accessLevel", "accessRights"), coerce_access_level),
 }
 
 

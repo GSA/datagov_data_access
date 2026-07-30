@@ -27,10 +27,7 @@ def test_dataset_to_document_normalizes_access_level(mock_dataset_with_datetime)
 
 
 def test_dataset_to_document_falls_back_to_access_rights(mock_dataset_with_datetime):
-    dcat = deepcopy(mock_dataset_with_datetime.dcat or {})
-    dcat.pop("accessLevel", None)
-    dcat["accessRights"] = "non-public"
-    mock_dataset_with_datetime.dcat = dcat
+    mock_dataset_with_datetime.dcat = {"accessRights": "non-public"}
 
     document = DatasetDocument(mock_dataset_with_datetime).dataset_to_document()
 
@@ -40,11 +37,10 @@ def test_dataset_to_document_falls_back_to_access_rights(mock_dataset_with_datet
 def test_dataset_to_document_prefers_access_level_over_access_rights(
     mock_dataset_with_datetime,
 ):
-    _set_dcat(
-        mock_dataset_with_datetime,
-        accessLevel="restricted public",
-        accessRights="public",
-    )
+    mock_dataset_with_datetime.dcat = {
+        "accessLevel": "restricted public",
+        "accessRights": "public",
+    }
 
     document = DatasetDocument(mock_dataset_with_datetime).dataset_to_document()
 

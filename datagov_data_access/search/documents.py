@@ -6,7 +6,10 @@ from typing import Any
 from datagov_data_access.db.models import Dataset
 from datagov_data_access.search.config import DEFAULT_CATALOG_BASE_URL, INDEX_NAME
 from datagov_data_access.search.spatial import calc_geometry_centroid
-from datagov_data_access.search.transforms import DcatIndexTransformer
+from datagov_data_access.search.transforms import (
+    DcatIndexTransformer,
+    coerce_access_level,
+)
 
 
 class DatasetDocument:
@@ -94,12 +97,9 @@ class DatasetDocument:
         )
         nested_dcat = self._normalize_dcat_dates(dataset.dcat)
 
-        access_level = (
+        index_fields["accessLevel"] = coerce_access_level(
             dataset.dcat.get("accessLevel") or dataset.dcat.get("accessRights") or None
         )
-
-        if access_level is not None:
-            access_level = str(access_level).strip().lower() or None
 
         spatial_centroid = calc_geometry_centroid(dataset.translated_spatial)
         last_harvested = (
@@ -119,7 +119,7 @@ class DatasetDocument:
             "last_harvested_date": last_harvested,
             "description": index_fields["description"],
             "publisher": index_fields["publisher"],
-            "access_level": access_level,
+            "access_level": index_fields["accessLevel"],
             "dcat": nested_dcat,
             "keyword": index_fields["keyword"],
             "theme": index_fields["theme"],
