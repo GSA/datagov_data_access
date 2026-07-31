@@ -97,7 +97,7 @@ class DatasetDocument:
         )
         nested_dcat = self._normalize_dcat_dates(dataset.dcat)
 
-        index_fields["accessLevel"] = coerce_access_level(
+        index_fields["access_level"] = coerce_access_level(
             dataset.dcat.get("accessLevel") or dataset.dcat.get("accessRights") or None
         )
 
@@ -119,7 +119,7 @@ class DatasetDocument:
             "last_harvested_date": last_harvested,
             "description": index_fields["description"],
             "publisher": index_fields["publisher"],
-            "access_level": index_fields["accessLevel"],
+            "access_level": index_fields["access_level"],
             "dcat": nested_dcat,
             "keyword": index_fields["keyword"],
             "theme": index_fields["theme"],
